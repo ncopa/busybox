@@ -22,6 +22,7 @@ jobs:
             -e 's/# CONFIG_SHA1SUM.*/CONFIG_SHA1SUM=y/' \
             -e 's/# CONFIG_SHA256SUM.*/CONFIG_SHA256SUM=y/' \
             .config
+          grep SHA .config
       - name: Build
         run: |
           make -j $(nproc)

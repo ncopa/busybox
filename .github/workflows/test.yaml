@@ -23,10 +23,26 @@ jobs:
           make -j $(nproc)
       - name: Test sha256sum
         run: |
-          ./busybox sha256sum busybox_unstripped
+          echo "core" | sudo tee /proc/sys/kernel/core_pattern
+          ./busybox_unstripped sha256sum busybox_unstripped
+      - name: Upload sha256sum core dump
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: coredump-sha256sum
+          path: |
+            core
+            busybox_unstripped
       - name: Test sha1sum
         run: |
           for i in $(seq 0 99); do
             ./busybox sha1sum busybox_unstripped
           done
-
+      - name: Upload sha1sum core dump
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: coredump-sha1sum
+          path: |
+            core
+            busybox_unstripped

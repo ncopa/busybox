@@ -23,6 +23,7 @@ jobs:
           make -j $(nproc)
       - name: Test sha256sum
         run: |
+          ulimit -c unlimited
           echo "core" | sudo tee /proc/sys/kernel/core_pattern
           ./busybox_unstripped sha256sum busybox_unstripped
       - name: Upload sha256sum core dump

@@ -26,6 +26,12 @@ jobs:
           ulimit -c unlimited
           echo "core" | sudo tee /proc/sys/kernel/core_pattern
           ./busybox_unstripped sha256sum busybox_unstripped
+      - name: find core dump
+        if: ${{ failure() }}
+        run: |
+          cat /proc/sys/kernel/core_pattern
+          find . -name core
+          find /var/crash/
       - name: Upload sha256sum core dump
         if: ${{ failure() }}
         uses: actions/upload-artifact@v2

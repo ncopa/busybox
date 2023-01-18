@@ -13,7 +13,7 @@ jobs:
           cat /proc/cpuinfo
       - name: Install dependencies
         run: |
-          apk add --update-cache build-base
+          apk add --update-cache build-base valgrind
       - name: Configure
         run: |
           make allnoconfig
@@ -28,9 +28,7 @@ jobs:
           make -j $(nproc)
       - name: Test sha256sum
         run: |
-          for i in $(seq 0 99); do
-            ./busybox sha256sum busybox_unstripped
-          done
+          valgrind ./busybox sha256sum busybox_unstripped
       - name: Test sha1sum
         run: |
           for i in $(seq 0 99); do

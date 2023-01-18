@@ -19,7 +19,8 @@ static void cpuid(unsigned *eax, unsigned *ebx, unsigned *ecx, unsigned *edx)
 {
 	asm ("cpuid"
 		: "=a"(*eax), "=b"(*ebx), "=c"(*ecx), "=d"(*edx)
-		: "0"(*eax),  "1"(*ebx),  "2"(*ecx),  "3"(*edx)
+		: "0"(*eax),  "2"(*ecx)
+		: "memory"
 	);
 }
 static smallint shaNI;

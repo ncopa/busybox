@@ -30,8 +30,7 @@ jobs:
         if: ${{ failure() }}
         run: |
           cat /proc/sys/kernel/core_pattern
-          find . -name core
-          find /var/crash/
+          sudo chmod +r core
       - name: Upload sha256sum core dump
         if: ${{ failure() }}
         uses: actions/upload-artifact@v2

@@ -1180,8 +1180,10 @@ void FAST_FUNC sha1_begin(sha1_ctx_t *ctx)
 			cpuid(&eax, &ebx, &ecx, &edx);
 			shaNI = ((ebx >> 29) << 1) - 1;
 		}
-		if (shaNI > 0)
+		if (shaNI > 0) {
+			printf("DEBUG: enable shaNI: %d\n", shaNI);
 			ctx->process_block = sha1_process_block64_shaNI;
+		}
 	}
 # endif
 #endif

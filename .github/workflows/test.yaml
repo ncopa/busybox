@@ -13,7 +13,7 @@ jobs:
           cat /proc/cpuinfo
       - name: Install dependencies
         run: |
-          apk add --update-cache build-base
+          apk add --update-cache build-base gdb
       - name: Configure
         run: |
           make allnoconfig
@@ -28,7 +28,8 @@ jobs:
       - name: Test sha256sum
         run: |
           for i in $(seq 0 99); do
-            ./busybox sha256sum busybox_unstripped
+            ./busybox sha256sum busybox_unstripped \
+              || gdb -ex=bt --batch --core core ./busybox
           done
       - name: Test sha1sum
         run: |

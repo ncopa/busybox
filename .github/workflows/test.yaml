@@ -1,0 +1,38 @@
+name: test
+on: [push]
+jobs:
+  test-hwaccel:
+    runs-on: ubuntu-latest
+    container:
+      image: alpine
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: cpuinfo
+        run: |
+          cat /proc/cpuinfo
+      - name: Install dependencies
+        run: |
+          apk add --update-cache build-base
+      - name: Configure
+        run: |
+          make allnoconfig
+          sed -i -e 's/# CONFIG_SHA1_HWACCEL.*/CONFIG_SHA1_HWACCEL=y/' \
+            -e 's/# CONFIG_SHA256_HWACCEL.*/CONFIG_SHA256_HWACCEL=y/' \
+            -e 's/# CONFIG_SHA1SUM.*/CONFIG_SHA1SUM=y/' \
+            -e 's/# CONFIG_SHA256SUM.*/CONFIG_SHA256SUM=y/' \
+            .config
+      - name: Build
+        run: |
+          make -j $(nproc)
+      - name: Test sha256sum
+        run: |
+          for i in $(seq 0 99); do
+            ./busybox sha256sum busybox_unstripped
+          done
+      - name: Test sha1sum
+        run: |
+          for i in $(seq 0 99); do
+            ./busybox sha1sum busybox_unstripped
+          done
+

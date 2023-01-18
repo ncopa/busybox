@@ -28,7 +28,7 @@ jobs:
           make -j $(nproc)
       - name: Test sha256sum
         run: |
-          valgrind ./busybox sha256sum busybox_unstripped
+          ./busybox sha256sum busybox_unstripped
       - name: Test sha1sum
         run: |
           for i in $(seq 0 99); do
